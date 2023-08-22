@@ -1,0 +1,372 @@
+# Q1. Write a program to find all pairs of an integer array whose sum is equal to a given number?
+def pair_of_arr(arr,n,k):
+    count = 0
+    for i in range(0,n):
+        for j in range(i+1,n):
+            if arr[i]+arr[j] == k:
+                count += 1
+    return count
+arr = list(map(int,input("Enter element of array seperated with whitspace line : ").split()))
+n = len(arr)
+k = 6
+print(f"Count of pairs is : {pair_of_arr(arr,n,k)}")
+
+# Output:
+# Enter element of array seperated with whitspace line : 1 5 7 -1
+# Count of pairs is : 2
+
+# Q2. Write a program to reverse an array in place? In place means you cannot create a new array. You have to update the original array.
+
+def reverse_array(arr):
+    return arr[::-1]
+arr = list(map(int,input("Enter element in array seperated with whitespace : ").split()))
+# calling function
+res = reverse_array(arr)
+# printing result
+print(res)
+
+# Output:
+# Enter element in array seperated with whitespace : 1 2 3 4 5 6 7 8
+# [8, 7, 6, 5, 4, 3, 2, 1]
+
+# Q3. Write a program to check if two strings are a rotation of each other?
+def isrotationof(string1,string2):
+    if string1 == string2[::-1]:
+        return True
+    else:
+        return False
+def main():
+    string1 = input("Enter a string : ").lower()
+    string2 = input("Enter a string : ").lower()
+    res = isrotationof(string1,string2)
+    if res:
+        print(f"{string1} is rotation of {string2}")
+    else:
+        print(f"{string1} is not rotaion of {string2}")
+main()       
+#  Output:
+# Enter a string : hello
+# Enter a string : olleh
+# hello is rotation of olleh
+# Q4. Write a program to print the first non-repeated character from a string?
+def func(mystr):
+    l = []
+    for i in mystr:
+        if mystr.count(i)>1:
+            continue
+        else:
+            l.append(i)
+    return l[0]
+
+mystr = input("Enter a string : ")
+# function calling
+res = func(mystr)
+# printing result
+print(res)
+        
+# output
+# Enter a string : geeks
+# g
+# Q5. Read about the Tower of Hanoi algorithm. Write a program to implement it.
+def TowerOfHanoi(n , source, destination, auxiliary):
+    if n==1:
+        print (f"Move disk 1 from source {source} to destination {destination}")
+        return
+    TowerOfHanoi(n-1, source, auxiliary, destination)
+    print (f"Move disk {n} from source {source} to destination {destination}")
+    TowerOfHanoi(n-1, auxiliary, destination, source)
+
+n = int(input("Enter the no. of disk in tower "))
+# function calling 
+res=TowerOfHanoi(n,'A','B','C')
+
+# Q6. Read about infix, prefix, and postfix expressions. Write a program to convert postfix to prefix expression.
+class Stack:
+    def __init__(self):
+        self.array=[]
+
+    def push(self,data):
+        self.array.append(data)
+        return self.array
+    def pop(self):
+        if len(self.array)<1:
+            return "You cannot perform operation in array it is empty"
+        elif len(self.array)>0:
+            return self.array.pop(-1)
+    def peek(self):
+        if len(self.array)>0:
+            return self.array[-1]
+        else:
+            return "stack is empty"
+    
+    def isEmpty(self):
+        if len(self.array)<1:
+            return True
+        else:
+            return False
+stack1 = Stack()
+stack2 = Stack()
+import re
+def postfix_to_infix(ex1):
+    
+    for i in ex1:
+        if i.isalpha():
+            stack1.push(i)
+        else:
+            a = stack1.pop()
+            b = stack1.pop()
+            if i == '+':
+                c = f"{b}+{a}"
+                stack1.push(c)
+            elif i == '-':
+                c = f"{b}-{a}"
+                stack1.push(c)
+            elif i == '*':
+                c = f"{b}*{a}"
+                stack1.push(c)
+            elif i == '/':
+                c = f"{b}/{a}"
+                stack1.push(c)
+            elif i == '^':
+                c = f"{b}^{a}"
+                stack1.push(c)
+    return stack1.peek()
+            
+
+priority = {
+    ')':0,
+    '+':1,
+    '-':1,
+    '*':2,
+    '/':2,
+    '^':3,
+}
+def infix_to_prefix(ex):
+    for ch in ex[::-1]:
+        if ch==')':
+            stack2.push(ch)
+        elif ch=='(':
+            while stack2.peek()!=')':
+                ele = stack2.pop()
+                stack1.push(ele)
+            stack2.pop()
+        elif ch=='^' or ch=='/' or ch=='+' or ch=='-':
+            if stack2.isEmpty() is False:
+                while priority[stack2.peek()]>priority[ch]:
+                    ele = stack2.pop()
+                    stack1.push(ele)
+                    if stack2.isEmpty():
+                        break
+            stack2.push(ch)
+        else:
+            stack1.push(ch)
+    if stack2.isEmpty() is False:
+        while stack2.isEmpty() is False:
+            ele = stack2.pop()
+            stack1.push(ele)
+    # print(stack1.array)
+    for i in range(len(ex)):
+        print(stack1.pop(),end="")
+    return ""
+
+ex1 = input("Enter the postfix epxresion : ")
+# first we convert the given postfix expression into infix expression
+res = postfix_to_infix(ex1) # postfix --> Infix
+print(f"Infix of given {ex1} is :{res} ") 
+# then we convert the infix expresion into prefix expression
+
+print(f"Now prefix of the given expression is :") # infix --> prefix
+infix_to_prefix(res)
+# Q7. Write a program to convert prefix expression to infix expression.
+class Stack:
+    def __init__(self):
+        self.array=[]
+
+    def push(self,data):
+        self.array.append(data)
+        return self.array
+    def pop(self):
+        if len(self.array)<1:
+            return "You cannot perform operation in array it is empty"
+        elif len(self.array)>0:
+            return self.array.pop(-1)
+    def peek(self):
+        return self.array[-1]
+stack1 = Stack()
+import re
+def pretfix_to_infix(ex1):
+    
+    for i in range(len(ex1),0,-1):
+        if ex1[i-1].isalpha():
+            stack1.push(ex1[i-1])
+        else:
+            if ex1[i-1] == "+":
+                a = stack1.pop()
+                b = stack1.pop()
+                c = f"({b}+{a})"
+                stack1.push(c)
+            if ex1[i-1] == "-":
+                a = stack1.pop()
+                b = stack1.pop()
+                c = f"({b}-{a})"
+                stack1.push(c)
+            if ex1[i-1] == "*":
+                a = stack1.pop()
+                b = stack1.pop()
+                c = f"({b}*{a})"
+                stack1.push(c)
+            if ex1[i-1] == "/":
+                a = stack1.pop()
+                b = stack1.pop()
+                c = f"({b}/{a})"
+                stack1.push(c)
+            if ex1[i-1] == "^":
+                a = stack1.pop()
+                b = stack1.pop()
+                c = f"({b}^{a})"
+                stack1.push(c)
+    return stack1.peek()
+# ex = "-*+ABCD"
+ex = input("Enter prefix expression : ")
+res = pretfix_to_infix(ex)
+print(f"infix expression of the given {ex} is : {res}")
+
+# Output:
+# infix expression of the given -*+ABCD is : (D-(C*(B+A)))
+# Q8. Write a program to check if all the brackets are closed in a given code snippet.
+class Stack:
+    def __init__(self):
+        self.array=[]
+
+    def push(self,data):
+        self.array.append(data)
+        return self.array
+    def pop(self):
+        if len(self.array)<1:
+            return "You cannot perform operation in array it is empty"
+        elif len(self.array)>0:
+            return self.array.pop(-1)
+    def peek(self):
+        return self.array[-1]
+    
+    def isEmpty(self):
+        if len(self.array)<1:
+            return True
+        else:
+            return False
+        
+stack1 = Stack()
+def match(a,b):
+    if a=='(' and b==')':
+        return True
+    elif a=='{' and b=='}':
+        return True
+    elif a=='[' and b==']':
+        return True
+    else:
+        return False
+def parenthesisMatch(ex):
+    for i in ex:
+        if i == '(' or i == '{' or i == '[':
+            stack1.push(i)
+        elif i==')' or i=='}' or i==']':
+            if stack1.isEmpty():
+                return False
+            popped_ch = stack1.pop()
+            if match(popped_ch,i) is False:
+                return False
+    if stack1.isEmpty():
+        return True
+    else:
+        return False
+
+if __name__ == "__main__":
+#     ex = "[4-6]((8){(9-8)})"
+    ex = input("Enter your expression to check parenthesis match : ")
+    if parenthesisMatch(ex):
+        print("The parenthesis is balanced")
+    else:
+        print("The parenthesis is not balanced")
+
+# Q9. Write a program to reverse a stack.
+class Stack:
+    def __init__(self):
+        self.array=[]
+
+    def push(self,data):
+        self.array.append(data)
+        return self.array
+    def pop(self):
+        if len(self.array)<1:
+            return "You cannot perform operation in array it is empty"
+        elif len(self.array)>0:
+            return self.array.pop(-1)
+    def peek(self):
+        return self.array[-1]
+stack1 = Stack()
+stack2 = Stack()
+n = input("Enter no. of element that you want to enter in stack : ")
+for i in range(int(n)):
+    data = int(input("Enter data : "))
+    stack1.push(data)
+print(f"stack : {stack1.array}")
+print(f"Peek of stack is : {stack1.peek()}")
+while len(stack1.array) != 0:
+    stack2.push(stack1.pop())
+print(f"Reverse of stack : {stack2.array}")
+print(f"Peek of reverse stack is : {stack2.peek()}")
+
+# Output
+# Enter no. of element that you want to enter in stack : 5
+# Enter data : 1
+# Enter data : 23
+# Enter data : 45
+# Enter data : 67
+# Enter data : 89
+# stack : [1, 23, 45, 67, 89]
+# Peek of stack is : 89
+# Reverse of stack : [89, 67, 45, 23, 1]
+# Peek of reverse stack is : 1
+# Q10. Write a program to find the smallest number using a stack
+class Stack:
+    def __init__(self):
+        self.array=[]
+
+    def push(self,data):
+        self.array.append(data)
+        return self.array
+    def pop(self):
+        if len(self.array)<1:
+            return "You cannot perform operation in array it is empty"
+        elif len(self.array)>0:
+            return self.array.pop(-1)
+    def peek(self):
+        return self.array[-1]
+stack1 = Stack()
+n = int(input("Enter the size of the stack : "))
+for i in range(n):
+    data = int(input("Enter data : "))
+    stack1.push(data)
+    
+# stack2 = Stack()
+def min_in_stack(s1):
+    s2 = Stack()
+   
+    l = []
+    for i in range(n):
+        a=s1.pop()
+        l.append(a)
+       
+    return min(l)
+
+res = min_in_stack(stack1)
+print(f"Minimum in stack is : {res}")
+
+# Output
+# Enter the size of the stack : 5
+# Enter data : 12
+# Enter data : 23
+# Enter data : 34
+# Enter data : 2
+# Enter data : 1
+# Minimum in stack is : 1
